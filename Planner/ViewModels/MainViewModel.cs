@@ -13,7 +13,7 @@ namespace Planner
         private double _lineWidth;
         private double _rightColumnWidth = 800;
         private double _leftColumnWidth = 200;
-        private readonly DataService service = new DataService("FolderData.txt");
+        private readonly DataService _service;
 
         public RelayCommand ClosingWindowCommand { get; private set; }
         public RelayCommand MinimizeWindowCommand { get; private set; }
@@ -209,7 +209,7 @@ namespace Planner
             Application.Current.Shutdown();
             try
             {
-                service.SaveData(Folders);
+                _service.SaveData(Folders);
             }
             catch (Exception ex)
             {
@@ -244,11 +244,12 @@ namespace Planner
             InputTaskText = "";
             OnPropertyChanged(nameof(LineWidth));
         }
-        public MainViewModel()
+        public MainViewModel(DataService dataService)
         {
             try
             {
-                Folders = service.LoadData();
+                _service = dataService;
+                Folders = _service.LoadData();
             }
             catch (Exception ex)
             {

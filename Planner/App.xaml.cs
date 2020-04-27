@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Planner.Utilty;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -16,7 +17,10 @@ namespace Planner
         public App()
         {
             InitializeComponent();
-            MainViewModel vm = new MainViewModel();
+
+            DataService dataService = new DataService();
+
+            MainViewModel vm = new MainViewModel(dataService);
             MainWindow view = new MainWindow(vm);
             view.Show();
         }
