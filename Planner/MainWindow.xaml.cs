@@ -7,9 +7,10 @@ namespace Planner
 {
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(MainViewModel viewModel)
         {
             InitializeComponent();
+            DataContext = viewModel;
             ((INotifyCollectionChanged)ListOfTasks.Items).CollectionChanged += ListView_CollectionChanged;
         }
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) //Moving the window

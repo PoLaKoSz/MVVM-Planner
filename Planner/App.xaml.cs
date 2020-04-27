@@ -13,5 +13,12 @@ namespace Planner
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            InitializeComponent();
+            MainViewModel vm = new MainViewModel();
+            MainWindow view = new MainWindow(vm);
+            view.Show();
+        }
     }
 }

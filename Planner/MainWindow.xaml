@@ -10,11 +10,6 @@
         ResizeMode="NoResize" 
         WindowStyle="None"
         >
-
-
-    <Window.DataContext>
-        <local:MainViewModel></local:MainViewModel>
-    </Window.DataContext>
     
     <Window.Resources>
 
