@@ -15,20 +15,20 @@ namespace Planner
         private double _leftColumnWidth = 200;
         private readonly DataService _service;
 
-        public RelayCommand ClosingWindowCommand { get; private set; }
-        public RelayCommand MinimizeWindowCommand { get; private set; }
-        public RelayCommand AddFolderCommand { get; private set; }
-        public RelayCommand SelectFolderCommand { get; private set; }
-        public RelayCommand AddTaskCommand { get; private set; }
-        public RelayCommand MakeTaskDoneCommand { get; private set; }
-        public RelayCommand DeleteTaskCommand { get; private set; }
-        public RelayCommand DeleteFolderCommand { get; private set; }
-        public RelayCommand ChangeRightColumnWidthCommand { get; private set; }
-        public RelayCommand ChangeRightColumnWidthBackCommand { get; private set; }
-        public RelayCommand MakeTaskInProgressCommand { get; private set; }
+        public RelayCommand ClosingWindowCommand { get; }
+        public RelayCommand MinimizeWindowCommand { get; }
+        public RelayCommand AddFolderCommand { get; }
+        public RelayCommand SelectFolderCommand { get; }
+        public RelayCommand AddTaskCommand { get; }
+        public RelayCommand MakeTaskDoneCommand { get; }
+        public RelayCommand DeleteTaskCommand { get; }
+        public RelayCommand DeleteFolderCommand { get; }
+        public RelayCommand ChangeRightColumnWidthCommand { get; }
+        public RelayCommand ChangeRightColumnWidthBackCommand { get; }
+        public RelayCommand MakeTaskInProgressCommand { get; }
 
 
-        public ObservableCollection<Folder> Folders { get; set; }
+        public ObservableCollection<Folder> Folders { get; }
 
         public double RightColumnWidth
         {
