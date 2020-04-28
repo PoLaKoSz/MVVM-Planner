@@ -13,6 +13,7 @@ namespace Planner
         private double _lineWidth;
         private double _rightColumnWidth = 800;
         private double _leftColumnWidth = 200;
+        private Folder _selectedFolder;
         private readonly DataService _service;
 
         public RelayCommand ClosingWindowCommand { get; }
@@ -29,6 +30,12 @@ namespace Planner
 
 
         public ObservableCollection<Folder> Folders { get; }
+
+        public Folder SelectedFolder
+        {
+            get => _selectedFolder;
+            set => OnPropertyChanged(ref _selectedFolder, value);
+        }
 
         public double RightColumnWidth
         {
@@ -57,9 +64,9 @@ namespace Planner
         {
             get
             {
-                if (SelectedFolder().Tasks.Count == 0 || SelectedFolder() == null)
+                if (SelectedFolder == null ||SelectedFolder.Tasks.Count == 0)
                     return 0;
-                double percentOfDone = Convert.ToDouble(SelectedFolder().NumberOfDoneTasks) / Convert.ToDouble(SelectedFolder().Tasks.Count);
+                double percentOfDone = Convert.ToDouble(SelectedFolder.NumberOfDoneTasks) / Convert.ToDouble(SelectedFolder.Tasks.Count);
                 _lineWidth = RightColumnWidth * percentOfDone;
                 return _lineWidth;
             }
@@ -118,12 +125,12 @@ namespace Planner
                     if ((parameter as TaskModel).Done)
                     {
                         (parameter as TaskModel).InProgress = false;
-                        SelectedFolder().NumberOfDoneTasks++;
-                        SelectedFolder().NumberOfTasksInProgress--;
+                        SelectedFolder.NumberOfDoneTasks++;
+                        SelectedFolder.NumberOfTasksInProgress--;
                     }
                     else
                     {
-                        SelectedFolder().NumberOfDoneTasks--;
+                        SelectedFolder.NumberOfDoneTasks--;
                     }
                 }
                 catch (Exception ex)
@@ -132,16 +139,6 @@ namespace Planner
                 }
                 OnPropertyChanged(nameof(LineWidth));
             }
-        }
-
-        private Folder SelectedFolder()
-        {
-            foreach (Folder x in Folders)
-            {
-                if (x.Selected)
-                    return x;
-            }
-            return null;
         }
 
         private void AddFolder()
@@ -167,17 +164,17 @@ namespace Planner
             {
                 if ((parameter as TaskModel).Done)
                 {
-                    SelectedFolder().Tasks.Remove(parameter as TaskModel);
-                    SelectedFolder().NumberOfDoneTasks--;
+                    SelectedFolder.Tasks.Remove(parameter as TaskModel);
+                    SelectedFolder.NumberOfDoneTasks--;
                 }
                 else if ((parameter as TaskModel).InProgress)
                 {
-                    SelectedFolder().Tasks.Remove(parameter as TaskModel);
-                    SelectedFolder().NumberOfTasksInProgress--;
+                    SelectedFolder.Tasks.Remove(parameter as TaskModel);
+                    SelectedFolder.NumberOfTasksInProgress--;
                 }
                 else
                 {
-                    SelectedFolder().Tasks.Remove(parameter as TaskModel);
+                    SelectedFolder.Tasks.Remove(parameter as TaskModel);
                 }
                 OnPropertyChanged(nameof(LineWidth));
             }
@@ -221,17 +218,17 @@ namespace Planner
         {
             if (parameter != null)
             {
-                int index = SelectedFolder().Tasks.IndexOf(parameter as TaskModel);
-                SelectedFolder().Tasks[index].InProgress = !SelectedFolder().Tasks[index].InProgress;
-                if (SelectedFolder().Tasks[index].InProgress)
+                int index = SelectedFolder.Tasks.IndexOf(parameter as TaskModel);
+                SelectedFolder.Tasks[index].InProgress = !SelectedFolder.Tasks[index].InProgress;
+                if (SelectedFolder.Tasks[index].InProgress)
                 {
-                    SelectedFolder().NumberOfTasksInProgress++;
-                    SelectedFolder().Tasks[index].Done = false;
-                    SelectedFolder().NumberOfDoneTasks--;
+                    SelectedFolder.NumberOfTasksInProgress++;
+                    SelectedFolder.Tasks[index].Done = false;
+                    SelectedFolder.NumberOfDoneTasks--;
                     OnPropertyChanged(nameof(LineWidth));
                     return;
                 }
-                SelectedFolder().NumberOfTasksInProgress--;
+                SelectedFolder.NumberOfTasksInProgress--;
             }
         }
 
@@ -240,7 +237,7 @@ namespace Planner
         private void AddTask()
         {
             if (CanAddText(InputTaskText))
-                SelectedFolder().Tasks.Add(new TaskModel(InputTaskText));
+                SelectedFolder.Tasks.Add(new TaskModel(InputTaskText));
             InputTaskText = "";
             OnPropertyChanged(nameof(LineWidth));
         }
