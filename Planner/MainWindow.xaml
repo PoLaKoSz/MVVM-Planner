@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
         xmlns:local="clr-namespace:Planner"
         mc:Ignorable="d" 
         WindowStartupLocation="CenterScreen"
@@ -131,7 +132,7 @@
             
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="570"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             
             <Grid.ColumnDefinitions>
@@ -223,11 +224,39 @@
                 </Button.Template>
             </Button>
 
+            <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Background="White">
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}RightColumnWidth: {0}">
+                            <Binding Path="RightColumnWidth" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}SelectedFolder.NumberOfDoneTasks: {0}">
+                            <Binding Path="SelectedFolder.NumberOfDoneTasks" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}SelectedFolder.Tasks.Count: {0}">
+                            <Binding Path="SelectedFolder.Tasks.Count" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <Label Content="SelectedFolder.NumberOfDoneTasks/SelectedFolder.Tasks.Count" />
+                <TextBlock Text="{c:Binding SelectedFolder.NumberOfDoneTasks/0.3}" />
+                <Label Content="RightColumnWidth * (SelectedFolder.NumberOfDoneTasks / SelectedFolder.Tasks.Count)" />
+                <TextBlock Text="{c:Binding RightColumnWidth*(SelectedFolder.NumberOfDoneTasks/SelectedFolder.Tasks.Count)}" />
+            </StackPanel>
+
             <!--ListOfTasks-->
             <Grid Name="TasksGrid"
                   Grid.Row="1" Grid.ColumnSpan="3" 
                   VerticalAlignment="Top"
-                  Visibility="{Binding ElementName=FoldersListView,Path=HasItems,Converter={StaticResource BoolConverter},FallbackValue=Hidden}">
+                  Visibility="Hidden">
                 <UniformGrid Columns="3" Margin="2,0">
                     <FrameworkElement x:Name="UniformElement"/>
                 </UniformGrid>
@@ -666,12 +695,12 @@
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="2"/>
-                                <RowDefinition Height="46"/>
+                                <RowDefinition Height="500"/>
+                                <RowDefinition Height="10"/>
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                                  Background="{StaticResource LightGrey}">
-                                <Line X1="0" Y1="1" X2="{Binding LineWidth,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,FallbackValue=0}" Y2="1"
+                                  Background="Yellow">
+                                <Line X1="0" Y1="1" X2="{c:Binding RightColumnWidth * (SelectedFolder.NumberOfDoneTasks / SelectedFolder.Tasks.Count),UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,FallbackValue=0}" Y2="1"
                                       Stroke="{StaticResource Nephritis}" 
                                       StrokeThickness="2" StrokeEndLineCap="Round" StrokeStartLineCap="Square" 
                                       Margin="-2 0 0 0" />
